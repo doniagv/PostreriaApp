@@ -1,0 +1,16 @@
+.DessertsSection {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.DessertsSection p {
+  padding-top: 20px;
+  color: black;
+}
+.DessertsSection span {
+  font-weight: 700;
+  color: #44516c;
+}

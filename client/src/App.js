@@ -1,5 +1,6 @@
 import "./App.css";
 import Finance from "./components/Finance/Finance";
+import Desserts from "./components/Desserts/Desserts";
 
 function App() {
   return (
@@ -9,6 +10,10 @@ function App() {
       </div>
       <div>
         <Finance />
+        <div className="postres">
+          <h2>Desserts</h2>
+          <Desserts />
+        </div>
       </div>
     </>
   );
