@@ -4,12 +4,21 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  /* background: rgb(255, 255, 255);
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 1) 65%,
+    rgba(246, 168, 217, 1) 100%
+  ); */
 }
 
 h1 {
+  margin: 10px;
   text-align: center;
-  font-size: 4rem;
-  color: #44516c;
+  font-size: 3.8rem;
+  color: #fff;
+
+  text-shadow: 6px 1px 6px rgba(0, 0, 0, 0.726);
 }
 
 .postres {

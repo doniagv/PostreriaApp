@@ -30,32 +30,27 @@ const Desserts = () => {
     },
     {
       id: "5",
-      name: "Cheescake",
+      name: "Jelly",
       price: 400,
       ingredients: ["Sugar", "Cheese", "Strawberry"],
     },
     {
       id: "6",
-      name: "Cheescake",
+      name: "Muffin",
       price: 400,
       ingredients: ["Sugar", "Cheese", "Strawberry"],
     },
     {
       id: "7",
-      name: "Cheescake",
+      name: "Bread shell",
       price: 400,
       ingredients: ["Sugar", "Cheese", "Strawberry"],
     },
   ];
   return (
     <div className={classes.DessertsSection}>
-      {desserts.map((dessert) => (
-        <Dessert
-          key={dessert.id}
-          name={dessert.name}
-          ingredients={dessert.ingredients}
-          price={dessert.price}
-        />
+      {desserts.map(({ id, name, ingredients, price }) => (
+        <Dessert key={id} name={name} ingredients={ingredients} price={price} />
       ))}
     </div>
   );
