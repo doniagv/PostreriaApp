@@ -33,9 +33,38 @@ JOIN product_ingredient_list ON product.product_id = product_ingredient_list.pro
 JOIN ingredient ON product_ingredient_list.ingredient_id = ingredient.ingredient_id
 WHERE product.product_id = 1;
 
+"SELECT ingredient.ingredient_name, product_ingredient_list.quantity, ingredient.type FROM product JOIN category ON product.category_id = category.category_id JOIN product_ingredient_list ON product.product_id = product_ingredient_list.product_id  JOIN ingredient ON product_ingredient_list.ingredient_id = ingredient.ingredient_id WHERE product.product_id = 1"
+
+
 -- Select products with category id
 
 SELECT *
 FROM product
 JOIN category ON product.category_id = category.category_id
 WHERE product.category_id = 4;
+
+INSERT INTO product (product_name, price, category_id, stock) VALUES ('Cake', 299, 5, 2);
+
+INSERT INTO order_product (order_id, product_id, quantity) VALUES (1,1,1);
+
+SELECT *
+FROM orders
+JOIN customer ON customer.customer_id = orders.customer_id
+JOIN order_product ON orders.order_id = order_product.order_id
+JOIN product ON product.product_id = order_product.product_id;
+
+-- Categories id and names
+
+-- 1	"Bread"
+-- 2	"Rolls"
+-- 3	"Cookies"
+-- 4	"Pies"
+-- 5	"Pastries"
+-- 6	"Muffins"
+
+
+
+
+-- Update product
+
+UPDATE product SET product_name = "", price = , category_id = , stock = WHERE product_id = 5;

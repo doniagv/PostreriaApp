@@ -8,72 +8,92 @@ app.use(express.json());
 
 // Get all products
 
-app.get("/api/products", (req, res) => {
-  db.query("select * from");
-  res.status(200).json({
-    status: "success",
-    data: {
-      products: [
-        {
-          name: "Cake",
-          category_id: 3,
-          price: 299,
-          stock: 3,
-        },
-        {
-          name: "Cheesecake",
-          category_id: 3,
-          price: 399,
-          stock: 1,
-        },
-      ],
-    },
-  });
+app.get("/api/products", async (req, res) => {
+  try {
+    const results = await db.query("select * from product");
+    console.log(results);
+    res.status(200).json({
+      status: "success",
+      results: results.rows.length,
+      data: {
+        products: results.rows,
+      },
+    });
+  } catch (err) {
+    console.log(err);
+  }
 });
 
 // Get a product
 
-app.get("/api/products/:id", (req, res) => {
+app.get("/api/products/:id", async (req, res) => {
   console.log(req.params);
-  res.status(200).json({
-    status: "Success",
-    data: {
-      name: "Cake",
-      category_id: 3,
-      price: 299,
-      stock: 3,
-    },
-  });
+  try {
+    const results = await db.query(
+      "select * from product where product_id = $1",
+      [req.params.id]
+    );
+    res.status(200).json({
+      status: "Success",
+      data: results.rows[0],
+    });
+  } catch (err) {
+    console.log(err);
+  }
 });
 
 // Create a product
 
-app.post("/api/products", (req, res) => {
+app.post("/api/products", async (req, res) => {
   console.log(req.body);
-  res.status(201).json({
-    status: "Success",
-    data: {
-      name: "Cake",
-      category_id: 2,
-      price: 299,
-      stock: 3,
-    },
-  });
+
+  try {
+    const results = await db.query(
+      "INSERT INTO product (product_name, price, category_id, stock) values ($1, $2, $3, $4) returning *",
+      [
+        req.body.product_name,
+        req.body.price,
+        req.body.categoryid,
+        req.body.stock,
+      ]
+    );
+    console.log(results);
+    res.status(201).json({
+      status: "Success",
+      data: {
+        product: results.rows[0],
+      },
+    });
+  } catch (err) {
+    console.log(err);
+  }
 });
 
 // Update products
 
-app.put("/api/products/:id", (req, res) => {
+app.put("/api/products/:id", async (req, res) => {
+  try {
+    const results = await db.query(
+      "UPDATE product SET product_name = $1, price = $2, category_id = $3, stock = $4 WHERE product_id = $5 returning *",
+      [
+        req.body.product_name,
+        req.body.price,
+        req.body.categoryid,
+        req.body.stock,
+        req.params.id,
+      ]
+    );
+    res.status(200).json({
+      status: "Success",
+      data: {
+        product: results.rows[0],
+      },
+    });
+  } catch (err) {
+    console.log(err);
+  }
   console.log(req.params.id);
   console.log(req.body);
-  res.status(200).json({
-    status: "Success",
-    data: {
-      name: "Cake",
-      price: 299,
-      stock: 3,
-    },
-  });
 });
 
 // Delete Product
