@@ -43,6 +43,8 @@ FROM product
 JOIN category ON product.category_id = category.category_id
 WHERE product.category_id = 4;
 
+
+
 INSERT INTO product (product_name, price, category_id, stock) VALUES ('Cake', 299, 5, 2);
 
 INSERT INTO order_product (order_id, product_id, quantity) VALUES (1,1,1);
@@ -68,3 +70,24 @@ JOIN product ON product.product_id = order_product.product_id;
 -- Update product
 
 UPDATE product SET product_name = "", price = , category_id = , stock = WHERE product_id = 5;
+
+
+
+
+
+
+
+-- Triggers
+
+-- Add ingredient price in expense
+
+-- CREATE TRIGGER expense_trigger AFTER INSERT ON expense_ingredient
+-- FOR EACH ROW EXECUTE PROCEDURE addexpensefunc();
+
+-- CREATE OR REPLACE FUNCTION addexpensefunc() RETURNS TRIGGER AS $example_table$
+--    BEGIN
+--       INSERT INTO expense(expense_id, expense_total, expense_date) VALUES (new.expense_id, new.quantity, current_timestamp);
+--       RETURN NEW;
+--    END;
+-- $example_table$ LANGUAGE plpgsql;
+

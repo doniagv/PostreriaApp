@@ -8,9 +8,29 @@ app.use(express.json());
 
 // Get all products
 
+// app.get("/api/products", async (req, res) => {
+//   try {
+//     const results = await db.query("select * from product");
+//     console.log(results);
+//     res.status(200).json({
+//       status: "success",
+//       results: results.rows.length,
+//       data: {
+//         products: results.rows,
+//       },
+//     });
+//   } catch (err) {
+//     console.log(err);
+//   }
+// });
+
+// Get all products with category name
+
 app.get("/api/products", async (req, res) => {
   try {
-    const results = await db.query("select * from product");
+    const results = await db.query(
+      "select * from product join category on category.category_id = product.category_id"
+    );
     console.log(results);
     res.status(200).json({
       status: "success",
@@ -98,11 +118,18 @@ app.put("/api/products/:id", async (req, res) => {
 
 // Delete Product
 
-// app.delete("/api/products/:id", (req, res) => {
-//   res.status(204).json({
-//     status: "Success",
-//   });
-// });
+app.delete("/api/products/:id", async (req, res) => {
+  try {
+    const results = db.query("DELETE FROM product where product_id = $1", [
+      req.params.id,
+    ]);
+    res.status(204).json({
+      status: "Success",
+    });
+  } catch (err) {
+    console.log(err);
+  }
+});
 
 const port = process.env.PORT || 3001;
 
