@@ -1,129 +1,164 @@
-import React from "react";
-import { Table, Button } from "antd";
+import React, { useEffect, useContext } from "react";
+import { ProductContext } from "../../context/ProductsContext";
+import ProductFinder from "../../apis/ProductFinder";
+import { Table, Button, Popconfirm, message } from "antd";
+import { QuestionCircleOutlined } from "@ant-design/icons";
 import "antd/dist/antd.css";
 
-const columns = [
-  {
-    title: "Product",
-    dataIndex: "product",
-    // specify the condition of filtering result
-    // here is that finding the name started with `value`
-    render: (text) => <a>{text}</a>,
-  },
-  {
-    title: "Price",
-    dataIndex: "price",
-    defaultSortOrder: "descend",
-    sorter: (a, b) => a.price - b.price,
-  },
-  {
-    title: "Category",
-    dataIndex: "category",
-    filters: [
-      {
-        text: "Bread",
-        value: "Bread",
-      },
-      {
-        text: "Rolls",
-        value: "Rolls",
-      },
-      {
-        text: "Cookies",
-        value: "Cookies",
-      },
-      {
-        text: "Pies",
-        value: "Pies",
-      },
-      {
-        text: "Pastries",
-        value: "Pastries",
-      },
-      {
-        text: "Muffins",
-        value: "Muffins",
-      },
-    ],
-    onFilter: (value, record) => record.category.indexOf(value) === 0,
-  },
-  {
-    title: "Stock",
-    dataIndex: "stock",
-    defaultSortOrder: "descend",
-
-    sorter: (a, b) => a.stock - b.stock,
-  },
-  {
-    title: "Update",
-    render: () => (
-      <Button
-        type="primary"
-        style={{ background: "#44516c", borderColor: "#44516c" }}
-      >
-        Update
-      </Button>
-    ),
-  },
-  {
-    title: "Delete",
-    render: () => (
-      <Button
-        type="primary"
-        style={{ background: "#fb3640", borderColor: "#fb3640" }}
-      >
-        Delete
-      </Button>
-    ),
-  },
-];
-
-const data = [
-  {
-    key: "1",
-    product: "Cake",
-    price: 109,
-    category: "Pastries",
-    stock: 3,
-  },
-  {
-    key: "2",
-    product: "Muffin",
-    price: 39,
-    category: "Muffins",
-    stock: 5,
-  },
-  {
-    key: "3",
-    product: "Cookie",
-    price: 32,
-    category: "Cookies",
-    stock: 10,
-  },
-  {
-    key: "4",
-    product: "Chocolate Cake",
-    price: 299,
-    category: "Pastries",
-    stock: 2,
-  },
-];
-
-function onChange(pagination, filters, sorter, extra) {
-  console.log("params", pagination, filters, sorter, extra);
-}
-
 const ProductTable = () => {
+  const { products, setProducts } = useContext(ProductContext);
+
+  const columns = [
+    {
+      title: "Product",
+
+      dataIndex: "product_name",
+      render: (text) => <a>{text}</a>,
+    },
+    {
+      title: "Price",
+      dataIndex: "price",
+      defaultSortOrder: "descend",
+      sorter: (a, b) => a.price - b.price,
+    },
+    {
+      title: "Category",
+      dataIndex: "category_name",
+
+      filters: [
+        {
+          text: "Bread",
+          value: "Bread",
+        },
+        {
+          text: "Rolls",
+          value: "Rolls",
+        },
+        {
+          text: "Cookies",
+          value: "Cookies",
+        },
+        {
+          text: "Pies",
+          value: "Pies",
+        },
+        {
+          text: "Pastries",
+          value: "Pastries",
+        },
+        {
+          text: "Muffins",
+          value: "Muffins",
+        },
+      ],
+      onFilter: (value, record) => record.category_name.indexOf(value) === 0,
+    },
+    {
+      title: "Stock",
+      dataIndex: "stock",
+      defaultSortOrder: "descend",
+      sorter: (a, b) => a.stock - b.stock,
+    },
+    {
+      title: "Update",
+      render: () => (
+        <Button
+          type="primary"
+          style={{ background: "#44516c", borderColor: "#44516c" }}
+        >
+          Update
+        </Button>
+      ),
+    },
+    {
+      title: "Delete",
+      render: (record) => (
+        <Popconfirm
+          title="Are you sure you want to delete this product ?"
+          okText="Yes"
+          icon={<QuestionCircleOutlined style={{ color: "red" }} />}
+          onConfirm={() => handleDelete(record.product_id)}
+        >
+          <Button
+            type="primary"
+            style={{ background: "#fb3640", borderColor: "#fb3640" }}
+          >
+            Delete
+          </Button>
+        </Popconfirm>
+      ),
+    },
+    // {
+    //   title: "Add ingredients",
+    //   render: () => <Button type="primary">Add ingredients</Button>,
+    // },
+  ];
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await ProductFinder.get("/");
+        setProducts(response.data.data.products);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, [setProducts]);
+
+  const handleDelete = async (id) => {
+    try {
+      const response = await ProductFinder.delete(`/${id}`);
+      setProducts(
+        products.filter((product) => {
+          return product.product_id !== id;
+        })
+      );
+      message.success("Product deleted succesfully!");
+    } catch (error) {}
+  };
+
   return (
     <div>
-      <Table
-        columns={columns}
-        pagination={{ pageSize: 10 }}
-        dataSource={data}
-        onChange={onChange}
-      />
+      {products.length > 0 ? (
+        <Table
+          columns={columns}
+          pagination={{ pageSize: 10 }}
+          dataSource={products}
+          rowKey="product_id"
+          bordered
+        />
+      ) : (
+        <h3>Add a product to see the list of products</h3>
+      )}
     </div>
   );
 };
 
 export default ProductTable;
+
+// const data = [
+//   {
+//     key: "1",
+//     product: "Cake",
+//     price: 109,
+//     category: "Pastries",
+//     stock: 3,
+//   },
+//
+// ];
+
+// function onChange(pagination, filters, sorter, extra) {
+//   console.log("params", pagination, filters, sorter, extra);
+// }
+
+// const result = products;
+
+// setProducts(
+//   products.map(({ product_id, product_name, category_name, ...rest }) => ({
+//     ...rest,
+//     key: product_id,
+//     product: product_name,
+//     category: category_name,
+//   }))
+// );

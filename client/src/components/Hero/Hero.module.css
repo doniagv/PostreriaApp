@@ -38,7 +38,7 @@ Button {
 }
 
 .ProductsHeader {
-  background-color: #f6a8d9;
+  background-color: #e9cb93;
   display: flex;
   flex-direction: column;
   padding: 3rem;
@@ -47,4 +47,10 @@ Button {
 
 .ProductTableSection {
   margin: 3rem;
+}
+
+h3 {
+  font-size: 2.3rem;
+  margin: 3rem !important;
+  color: #434a3e !important;
 }

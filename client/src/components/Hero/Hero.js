@@ -2,8 +2,9 @@ import React from "react";
 import classes from "./Hero.module.css";
 import bg from "./bakerybgt.jpg";
 import ProductTable from "../ProductTable/ProductTable";
-import { Button } from "antd";
-import { ShopOutlined, PlusCircleOutlined } from "@ant-design/icons";
+import AddProduct from "../AddProduct/AddProduct";
+// import { Button } from "antd";
+import { ShopOutlined } from "@ant-design/icons";
 
 const Hero = () => {
   return (
@@ -17,9 +18,7 @@ const Hero = () => {
           <ShopOutlined style={{ fontSize: "3rem", color: "#fff" }} />
         </div>
         <div className={classes.ProductTableSection}>
-          <Button style={{ margin: "1rem" }} icon={<PlusCircleOutlined />}>
-            Add product
-          </Button>
+          <AddProduct />
           <ProductTable />
         </div>
       </div>

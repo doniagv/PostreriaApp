@@ -1,28 +1,12 @@
 require("dotenv").config();
 const express = require("express");
+const cors = require("cors");
 const db = require("./db");
 
 const app = express();
 
+app.use(cors());
 app.use(express.json());
-
-// Get all products
-
-// app.get("/api/products", async (req, res) => {
-//   try {
-//     const results = await db.query("select * from product");
-//     console.log(results);
-//     res.status(200).json({
-//       status: "success",
-//       results: results.rows.length,
-//       data: {
-//         products: results.rows,
-//       },
-//     });
-//   } catch (err) {
-//     console.log(err);
-//   }
-// });
 
 // Get all products with category name
 
@@ -31,7 +15,7 @@ app.get("/api/products", async (req, res) => {
     const results = await db.query(
       "select * from product join category on category.category_id = product.category_id"
     );
-    console.log(results);
+
     res.status(200).json({
       status: "success",
       results: results.rows.length,
@@ -69,15 +53,15 @@ app.post("/api/products", async (req, res) => {
 
   try {
     const results = await db.query(
-      "INSERT INTO product (product_name, price, category_id, stock) values ($1, $2, $3, $4) returning *",
+      "with inserted_product as (INSERT INTO product (product_name, price, category_id, stock) values ($1, $2, $3, $4) returning *) select * from inserted_product join category on inserted_product.category_id = category.category_id",
       [
         req.body.product_name,
         req.body.price,
-        req.body.categoryid,
+        req.body.category_id,
         req.body.stock,
       ]
     );
-    console.log(results);
+
     res.status(201).json({
       status: "Success",
       data: {
@@ -129,6 +113,21 @@ app.delete("/api/products/:id", async (req, res) => {
   } catch (err) {
     console.log(err);
   }
+});
+
+// Get categories
+
+app.get("/api/categories", async (req, res) => {
+  try {
+    const results = await db.query("SELECT * FROM category");
+    res.status(200).json({
+      status: "success",
+      results: results.rows.length,
+      data: {
+        categories: results.rows,
+      },
+    });
+  } catch (error) {}
 });
 
 const port = process.env.PORT || 3001;
