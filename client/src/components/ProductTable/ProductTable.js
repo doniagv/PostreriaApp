@@ -1,4 +1,5 @@
 import React, { useEffect, useContext } from "react";
+import { useHistory } from "react-router-dom";
 import { ProductContext } from "../../context/ProductsContext";
 import ProductFinder from "../../apis/ProductFinder";
 import { Table, Button, Popconfirm, message } from "antd";
@@ -7,11 +8,11 @@ import "antd/dist/antd.css";
 
 const ProductTable = () => {
   const { products, setProducts } = useContext(ProductContext);
+  let history = useHistory();
 
   const columns = [
     {
       title: "Product",
-
       dataIndex: "product_name",
       render: (text) => <a>{text}</a>,
     },
@@ -61,9 +62,10 @@ const ProductTable = () => {
     },
     {
       title: "Update",
-      render: () => (
+      render: (record) => (
         <Button
           type="primary"
+          onClick={() => handleUpdate(record.product_id)}
           style={{ background: "#44516c", borderColor: "#44516c" }}
         >
           Update
@@ -116,6 +118,10 @@ const ProductTable = () => {
       );
       message.success("Product deleted succesfully!");
     } catch (error) {}
+  };
+
+  const handleUpdate = (id) => {
+    history.push(`/product/${id}/update`);
   };
 
   return (

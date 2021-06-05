@@ -17,35 +17,8 @@ const CategorySelector = (props) => {
     fetchData();
   }, [setCategories]);
 
-  //   const data = [
-  //     {
-  //       category_id: 1,
-  //       category_name: "Bread",
-  //     },
-  //     {
-  //       category_id: 2,
-  //       category_name: "Rolls",
-  //     },
-  //     {
-  //       category_id: 3,
-  //       category_name: "Cookies",
-  //     },
-  //     {
-  //       category_id: 4,
-  //       category_name: "Pies",
-  //     },
-  //     {
-  //       category_id: 5,
-  //       category_name: "Pastries",
-  //     },
-  //     {
-  //       category_id: 6,
-  //       category_name: "Muffins",
-  //     },
-  //   ];
-
   return (
-    <Select required={true} onChange={props.onChange}>
+    <Select required={true} value={props.value} onChange={props.onChange}>
       {categories.length !== 0 ? (
         categories.categories.map((category) => (
           <Select.Option

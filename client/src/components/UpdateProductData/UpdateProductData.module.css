@@ -1,0 +1,14 @@
+.UpdateHeader {
+  text-align: center;
+  font-size: 2rem;
+  background-color: #e9cb93;
+  color: white;
+  margin-bottom: 3rem;
+  padding: 2rem;
+}
+
+.UpdateHeader h3 {
+  font-family: "Quicksand", sans-serif;
+  color: white !important;
+  margin: 0 !important;
+}
