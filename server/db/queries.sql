@@ -47,6 +47,14 @@ JOIN product_ingredient_list ON product.product_id = product_ingredient_list.pro
 JOIN ingredient ON product_ingredient_list.ingredient_id = ingredient.ingredient_id
 WHERE product.product_id = 7;
 
+SELECT product.product_name, category.category_name, product.price, product.stock, ingredient.ingredient_name, product_ingredient_list.quantity, product_ingredient_list.measurement_type
+FROM product
+JOIN category ON product.category_id = category.category_id
+JOIN product_ingredient_list ON product.product_id = product_ingredient_list.product_id 
+JOIN ingredient ON product_ingredient_list.ingredient_id = ingredient.ingredient_id
+WHERE product.product_id = 7;
+
+"SELECT product.product_name, category.category_id, ingredient.ingredient_name, product_ingredient_list.quantity, product_ingredient_list.measurement_type FROM product JOIN category ON product.category_id = category.category_id JOIN product_ingredient_list ON product.product_id = product_ingredient_list.product_id  JOIN ingredient ON product_ingredient_list.ingredient_id = ingredient.ingredient_id WHERE product.product_id = 7"
 "SELECT ingredient.ingredient_name, product_ingredient_list.quantity, ingredient.type FROM product JOIN category ON product.category_id = category.category_id JOIN product_ingredient_list ON product.product_id = product_ingredient_list.product_id  JOIN ingredient ON product_ingredient_list.ingredient_id = ingredient.ingredient_id WHERE product.product_id = 1"
 
 
@@ -97,7 +105,11 @@ product.price, product.stock, category.category_name from inserted_product join 
 
 "INSERT INTO product (product_name, price, category_id, stock) values ($1, $2, $3, $4) returning *",
 
+"INSERT INTO product_ingredient_list (ingredient_id, product_id, measurment_type, quantity) values ($1, $2, $3, $4) returning *"
 
+
+
+"with inserted_ingredient as (INSERT INTO product_ingredient_list (ingredient_id, product_id, measurement_type, quantity) values ($1, $2, $3, $4) returning *) select * from inserted_ingredient join ingredient on inserted_ingredient.ingredient_id = ingredient.ingredient_id"
 
 
 -- Triggers

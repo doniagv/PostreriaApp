@@ -14,7 +14,14 @@ const ProductTable = () => {
     {
       title: "Product",
       dataIndex: "product_name",
-      render: (text) => <a>{text}</a>,
+      render: (text, record) => (
+        <Button
+          type="link"
+          onClick={() => handleProductSelect(record.product_id)}
+        >
+          {text}
+        </Button>
+      ),
     },
     {
       title: "Price",
@@ -122,6 +129,10 @@ const ProductTable = () => {
 
   const handleUpdate = (id) => {
     history.push(`/product/${id}/update`);
+  };
+
+  const handleProductSelect = (id) => {
+    history.push(`/product/${id}`);
   };
 
   return (

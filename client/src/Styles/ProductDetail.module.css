@@ -1,0 +1,16 @@
+.ProductTitle {
+  font-family: "Quicksand", sans-serif;
+  text-align: center;
+  font-size: 3rem;
+  background-color: #e9cb93;
+  color: #56332a;
+  padding: 2rem;
+}
+
+.Ingredients {
+  text-align: center;
+}
+
+.Ingredients h5 {
+  font-size: 2rem;
+}

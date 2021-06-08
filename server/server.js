@@ -49,8 +49,6 @@ app.get("/api/products/:id", async (req, res) => {
 // Create a product
 
 app.post("/api/products", async (req, res) => {
-  console.log(req.body);
-
   try {
     const results = await db.query(
       "with inserted_product as (INSERT INTO product (product_name, price, category_id, stock) values ($1, $2, $3, $4) returning *) select * from inserted_product join category on inserted_product.category_id = category.category_id",
@@ -115,6 +113,46 @@ app.delete("/api/products/:id", async (req, res) => {
   }
 });
 
+// Add ingredient to product
+
+app.post("/api/add", async (req, res) => {
+  try {
+    const results = await db.query(
+      "with inserted_ingredient as (INSERT INTO product_ingredient_list (ingredient_id, product_id, measurement_type, quantity) values ($1, $2, $3, $4) returning *) select * from inserted_ingredient join ingredient on inserted_ingredient.ingredient_id = ingredient.ingredient_id",
+      [
+        req.body.ingredient_id,
+        req.body.product_id,
+        req.body.measurement_type,
+        req.body.quantity,
+      ]
+    );
+    res.status(200).json({
+      status: "success",
+      data: {
+        ingredient: results.rows[0],
+      },
+    });
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+// Delete ingredient from product
+
+app.delete("/api/delete", async (req, res) => {
+  try {
+    const results = db.query(
+      "DELETE FROM product_ingredient_list where product_id = $1 AND ingredient_id = $2",
+      [req.body.product_id, req.body.ingredient_id]
+    );
+    res.status(204).json({
+      status: "Success",
+    });
+  } catch (err) {
+    console.log(err);
+  }
+});
+
 // Get categories
 
 app.get("/api/categories", async (req, res) => {
@@ -128,6 +166,42 @@ app.get("/api/categories", async (req, res) => {
       },
     });
   } catch (error) {}
+});
+
+// API for ingredients
+
+app.get("/api/products/ingredientlist/:id", async (req, res) => {
+  try {
+    const results = await db.query(
+      "SELECT ingredient.ingredient_id, ingredient.ingredient_name, product_ingredient_list.quantity, product_ingredient_list.measurement_type FROM product JOIN category ON product.category_id = category.category_id JOIN product_ingredient_list ON product.product_id = product_ingredient_list.product_id  JOIN ingredient ON product_ingredient_list.ingredient_id = ingredient.ingredient_id WHERE product.product_id = $1",
+      [req.params.id]
+    );
+    res.status(200).json({
+      status: "success",
+      results: results.rows.length,
+      data: {
+        ingredients: results.rows,
+      },
+    });
+  } catch (error) {}
+});
+
+app.get("/api/ingredients", async (req, res) => {
+  try {
+    const results = await db.query(
+      "select ingredient_id, ingredient_name from ingredient"
+    );
+
+    res.status(200).json({
+      status: "success",
+      results: results.rows.length,
+      data: {
+        ingredients: results.rows,
+      },
+    });
+  } catch (err) {
+    console.log(err);
+  }
 });
 
 const port = process.env.PORT || 3001;

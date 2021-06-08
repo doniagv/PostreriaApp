@@ -1,19 +1,23 @@
-import React, { useContext } from "react";
+import React, { useEffect, useContext } from "react";
 import { Button, Modal, Input, Form, message } from "antd";
 import { PlusCircleOutlined } from "@ant-design/icons";
-import CategorySelector from "../CategorySelector/CategorySelector";
-import ProductFinder from "../../apis/ProductFinder";
+import IngredientSelector from "../IngredientSelector/IngredientSelector";
+import AddFinder from "../../apis/AddFinder";
 import { ProductContext } from "../../context/ProductsContext";
 
-const AddProduct = () => {
-  const { addProducts } = useContext(ProductContext);
+const AddProductIngredient = (props) => {
+  const { addIngredientsProduct } = useContext(ProductContext);
   const [visible, setVisible] = React.useState(false);
   const [confirmLoading, setConfirmLoading] = React.useState(false);
   const [componentSize, setComponentSize] = React.useState("default");
-  const [product_name, setProductName] = React.useState("");
-  const [price, setPrice] = React.useState();
-  const [stock, setStock] = React.useState();
-  const [category, setCategory] = React.useState();
+  const [ingredient, setIngredient] = React.useState();
+  const [quantity, setQuantity] = React.useState();
+  const [ms_type, setMS] = React.useState();
+  const [product_id, setProductId] = React.useState();
+
+  useEffect(() => {
+    setProductId(props.id);
+  }, [props.id]);
 
   const onFormLayoutChange = ({ size }) => {
     setComponentSize(size);
@@ -27,17 +31,19 @@ const AddProduct = () => {
     e.preventDefault();
     setConfirmLoading(true);
     try {
-      const response = await ProductFinder.post("/", {
-        product_name: product_name,
-        price: price,
-        category_id: category,
-        stock: stock,
+      const response = await AddFinder.post("/", {
+        ingredient_id: ingredient,
+        product_id: product_id,
+        measurement_type: ms_type,
+        quantity: quantity,
       });
-      addProducts(response.data.data.product);
+      addIngredientsProduct(response.data.data.ingredient);
       setConfirmLoading(false);
       setVisible(false);
-      message.success("Product added successfully!");
-    } catch (error) {}
+      message.success("Ingredient added successfully to product!");
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleCancel = () => {
@@ -51,10 +57,10 @@ const AddProduct = () => {
         icon={<PlusCircleOutlined />}
         onClick={showModal}
       >
-        Add product
+        Add ingredient
       </Button>
       <Modal
-        title="Add new product"
+        title="Add ingredient to product"
         visible={visible}
         onOk={handleOk}
         confirmLoading={confirmLoading}
@@ -62,7 +68,7 @@ const AddProduct = () => {
       >
         <Form
           labelCol={{
-            span: 5,
+            span: 7,
           }}
           wrapperCol={{
             span: 14,
@@ -74,21 +80,15 @@ const AddProduct = () => {
           onValuesChange={onFormLayoutChange}
           size={componentSize}
         >
-          <Form.Item label="Product Name">
-            <Input
-              required={true}
-              onChange={(e) => setProductName(e.target.value)}
-            />
-          </Form.Item>
-          <Form.Item label="Price">
-            <Input type="number" onChange={(e) => setPrice(e.target.value)} />
-          </Form.Item>
-          <Form.Item label="Stock">
-            <Input type="number" onChange={(e) => setStock(e.target.value)} />
+          <Form.Item label="Ingredient">
+            <IngredientSelector onChange={(value) => setIngredient(value)} />
           </Form.Item>
 
-          <Form.Item label="Category">
-            <CategorySelector onChange={(value) => setCategory(value)} />
+          <Form.Item label="Quantity">
+            <Input type="text" onChange={(e) => setQuantity(e.target.value)} />
+          </Form.Item>
+          <Form.Item label="Measurment Type">
+            <Input type="text" onChange={(e) => setMS(e.target.value)} />
           </Form.Item>
         </Form>
       </Modal>
@@ -96,4 +96,4 @@ const AddProduct = () => {
   );
 };
 
-export default AddProduct;
+export default AddProductIngredient;
