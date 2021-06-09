@@ -19,7 +19,11 @@ function App() {
             <Route exact path="/" component={Home} />
             <Route exact path="/product/:id/update" component={UpdateProduct} />
             <Route exact path="/product/:id" component={ProductdetailPage} />
-            <Route exact path="/ingredient/:id" component={UpdateIngredient} />
+            <Route
+              exact
+              path="/ingredient/:id/update"
+              component={UpdateIngredient}
+            />
           </Switch>
         </Router>
       </ProductContextProvider>

@@ -234,6 +234,45 @@ app.post("/api/ingredients", async (req, res) => {
   }
 });
 
+app.put("/api/ingredients/:id", async (req, res) => {
+  try {
+    const results = await db.query(
+      "UPDATE ingredient SET ingredient_name = $1, price = $2, type = $3, stock = $4 WHERE ingredient_id = $5 returning *",
+      [
+        req.body.ingredient_name,
+        req.body.price,
+        req.body.type,
+        req.body.stock,
+        req.params.id,
+      ]
+    );
+    res.status(200).json({
+      status: "Success",
+      data: {
+        ingredient: results.rows[0],
+      },
+    });
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+app.get("/api/ingredients/:id", async (req, res) => {
+  console.log(req.params);
+  try {
+    const results = await db.query(
+      "select * from ingredient where ingredient_id = $1",
+      [req.params.id]
+    );
+    res.status(200).json({
+      status: "Success",
+      data: results.rows[0],
+    });
+  } catch (err) {
+    console.log(err);
+  }
+});
+
 const port = process.env.PORT || 3001;
 
 app.listen(port, () => {

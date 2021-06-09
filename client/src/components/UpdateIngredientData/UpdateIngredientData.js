@@ -1,17 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { Button, Input, Form, message } from "antd";
-
-import CategorySelector from "../CategorySelector/CategorySelector";
-import ProductFinder from "../../apis/ProductFinder";
+import IngredientFinder from "../../apis/IngredientFinder";
 
 const UpdateIngredientData = (props) => {
   const { id } = useParams();
   let history = useHistory();
-  const [product_name, setProductName] = React.useState("");
+  const [ingredient_name, setIngredientName] = React.useState("");
   const [price, setPrice] = React.useState();
   const [stock, setStock] = React.useState();
-  const [categoryid, setCategory] = React.useState();
+  const [type, setType] = React.useState();
   const [form] = Form.useForm();
   const [formLayout, setFormLayout] = useState("horizontal");
   const onFormLayoutChange = ({ layout }) => {
@@ -20,11 +18,11 @@ const UpdateIngredientData = (props) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await ProductFinder.get(`/${id}`);
-      setProductName(response.data.data.product_name);
+      const response = await IngredientFinder.get(`/${id}`);
+      setIngredientName(response.data.data.ingredient_name);
       setPrice(response.data.data.price);
       setStock(response.data.data.stock);
-      setCategory(response.data.data.category_id);
+      setType(response.data.data.type);
     };
     fetchData();
   }, [id]);
@@ -52,13 +50,13 @@ const UpdateIngredientData = (props) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const updatedProduct = await ProductFinder.put(`/${id}`, {
-      product_name,
+    const updatedIngredient = await IngredientFinder.put(`/${id}`, {
+      ingredient_name,
       price,
       stock,
-      categoryid,
+      type,
     });
-    message.success("Product updated succesfully!");
+    message.success("Ingredient updated succesfully!");
     history.push("/");
   };
 
@@ -73,10 +71,10 @@ const UpdateIngredientData = (props) => {
         }}
         onValuesChange={onFormLayoutChange}
       >
-        <Form.Item label="Product Name">
+        <Form.Item label="Ingredient Name">
           <Input
-            value={product_name}
-            onChange={(e) => setProductName(e.target.value)}
+            value={ingredient_name}
+            onChange={(e) => setIngredientName(e.target.value)}
           />
         </Form.Item>
         <Form.Item label="Price">
@@ -93,11 +91,8 @@ const UpdateIngredientData = (props) => {
             onChange={(e) => setStock(e.target.value)}
           />
         </Form.Item>
-        <Form.Item label="Category">
-          <CategorySelector
-            value={categoryid}
-            onChange={(value) => setCategory(value)}
-          />
+        <Form.Item label="Type">
+          <Input value={type} onChange={(e) => setType(e.target.value)} />
         </Form.Item>
         <Form.Item {...buttonItemLayout}>
           <Button type="primary" htmlType="submit" onClick={handleSubmit}>

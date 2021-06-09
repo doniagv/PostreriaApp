@@ -14,14 +14,6 @@ const IngredientTable = () => {
     {
       title: "Ingredient",
       dataIndex: "ingredient_name",
-      render: (text, record) => (
-        <Button
-          type="link"
-          onClick={() => handleProductSelect(record.ingredient_id)}
-        >
-          {text}
-        </Button>
-      ),
     },
     {
       title: "Price",
@@ -102,10 +94,6 @@ const IngredientTable = () => {
 
   const handleUpdate = (id) => {
     history.push(`/ingredient/${id}/update`);
-  };
-
-  const handleProductSelect = (id) => {
-    history.push(`/ingredient/${id}`);
   };
 
   return (
