@@ -188,15 +188,45 @@ app.get("/api/products/ingredientlist/:id", async (req, res) => {
 
 app.get("/api/ingredients", async (req, res) => {
   try {
-    const results = await db.query(
-      "select ingredient_id, ingredient_name from ingredient"
-    );
+    const results = await db.query("select * from ingredient");
 
     res.status(200).json({
       status: "success",
       results: results.rows.length,
       data: {
         ingredients: results.rows,
+      },
+    });
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+app.delete("/api/ingredients/:id", async (req, res) => {
+  try {
+    const results = db.query(
+      "DELETE FROM ingredient where ingredient_id = $1",
+      [req.params.id]
+    );
+    res.status(204).json({
+      status: "Success",
+    });
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+app.post("/api/ingredients", async (req, res) => {
+  try {
+    const results = await db.query(
+      "INSERT INTO ingredient (ingredient_name, price, stock, type) values ($1, $2, $3, $4) returning *",
+      [req.body.ingredient_name, req.body.price, req.body.stock, req.body.type]
+    );
+
+    res.status(201).json({
+      status: "Success",
+      data: {
+        ingredient: results.rows[0],
       },
     });
   } catch (err) {

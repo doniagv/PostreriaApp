@@ -1,5 +1,5 @@
 import React, { useEffect, useContext } from "react";
-import { Button, Modal, Input, Form, message } from "antd";
+import { Button, Modal, Input, Form, message, Popover } from "antd";
 import { PlusCircleOutlined } from "@ant-design/icons";
 import IngredientSelector from "../IngredientSelector/IngredientSelector";
 import AddFinder from "../../apis/AddFinder";
@@ -57,8 +57,16 @@ const AddProductIngredient = (props) => {
         icon={<PlusCircleOutlined />}
         onClick={showModal}
       >
-        Add ingredient
+        Add ingredient to product
       </Button>
+      <Popover
+        placement="bottom"
+        title="Can't find the ingredient?"
+        content="If you don't see an ingredient on the ingredient selector, add the ingredient in home page.  "
+        trigger="click"
+      >
+        <Button>?</Button>
+      </Popover>
       <Modal
         title="Add ingredient to product"
         visible={visible}

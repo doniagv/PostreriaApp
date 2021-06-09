@@ -38,6 +38,7 @@ const IngredientList = (props) => {
       title: "Measurment Type",
       dataIndex: "measurement_type",
     },
+
     {
       title: "Delete",
       render: (record) => (

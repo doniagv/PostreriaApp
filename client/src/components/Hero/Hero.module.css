@@ -48,6 +48,21 @@ Button {
 .ProductTableSection {
   margin: 3rem;
 }
+.IngredientsSection {
+  text-align: center;
+}
+
+.IngredientsHeader {
+  background-color: #56332a;
+  display: flex;
+  flex-direction: column;
+  padding: 3rem;
+  margin-bottom: 2rem;
+}
+
+.IngredientTableSection {
+  margin: 3rem;
+}
 
 h3 {
   font-size: 2.3rem;
