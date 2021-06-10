@@ -1,0 +1,10 @@
+.ExpensesSection {
+  text-align: center;
+}
+
+.HeaderExpenses {
+  background-color: #c58345;
+  padding: 3rem;
+  font-size: 3rem;
+  color: white;
+}

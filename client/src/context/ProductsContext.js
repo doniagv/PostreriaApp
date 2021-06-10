@@ -7,6 +7,8 @@ export const ProductContextProvider = (props) => {
   const [selectedProduct, setSelectedProduct] = useState([null]);
   const [ingredientsProduct, setIngredientsProduct] = useState([]);
   const [ingredients, setIngredients] = useState([]);
+  const [expenses, setExpenses] = useState([]);
+  const [totalExpense, setTotalExpense] = useState();
 
   const addProducts = (product) => {
     setProducts([...products, product]);
@@ -18,6 +20,18 @@ export const ProductContextProvider = (props) => {
 
   const addIngredientsProduct = (ingredient) => {
     setIngredientsProduct([...ingredientsProduct, ingredient]);
+  };
+
+  const addExpenses = (expense) => {
+    setExpenses([...expenses, expense]);
+  };
+
+  const addTotalExpense = (total) => {
+    if (totalExpense === null) {
+      setTotalExpense(parseInt(total));
+    } else {
+      setTotalExpense(parseInt(totalExpense) + parseInt(total));
+    }
   };
 
   return (
@@ -34,6 +48,12 @@ export const ProductContextProvider = (props) => {
         ingredients,
         setIngredients,
         addIngredients,
+        expenses,
+        setExpenses,
+        addExpenses,
+        totalExpense,
+        setTotalExpense,
+        addTotalExpense,
       }}
     >
       {props.children}

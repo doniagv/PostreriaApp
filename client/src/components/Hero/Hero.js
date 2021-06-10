@@ -7,6 +7,7 @@ import IngredientTable from "../IngredientTable/IngredientTable";
 // import { Button } from "antd";
 import { ShopOutlined, BarsOutlined } from "@ant-design/icons";
 import AddIngredient from "../AddIngredient/AddIngredient";
+import Expense from "../Expense/Expense";
 
 const Hero = () => {
   return (
@@ -34,6 +35,7 @@ const Hero = () => {
           <IngredientTable />
         </div>
       </div>
+      <Expense />
     </div>
   );
 };

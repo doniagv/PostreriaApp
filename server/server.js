@@ -273,6 +273,53 @@ app.get("/api/ingredients/:id", async (req, res) => {
   }
 });
 
+// Expenses api
+
+app.post("/api/expenses", async (req, res) => {
+  try {
+    const results = await db.query(
+      "INSERT INTO expense (expense_total, description, expense_date) values ($1, $2, $3) returning *",
+      [req.body.expense_total, req.body.description, req.body.expense_date]
+    );
+    res.status(201).json({
+      status: "Success",
+      data: {
+        expense: results.rows[0],
+      },
+    });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+app.get("/api/expenses", async (req, res) => {
+  try {
+    const results = await db.query("SELECT * FROM expense");
+    res.status(200).json({
+      status: "success",
+      results: results.rows.length,
+      data: {
+        expenses: results.rows,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+app.get("/api/expenses/total", async (req, res) => {
+  try {
+    const results = await db.query("SELECT SUM(expense_total) FROM expense");
+    res.status(200).json({
+      status: "success",
+      results: results.rows.length,
+      data: {
+        total: results.rows[0].sum,
+      },
+    });
+  } catch (error) {}
+});
+
 const port = process.env.PORT || 3001;
 
 app.listen(port, () => {
