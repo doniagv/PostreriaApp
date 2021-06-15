@@ -2,35 +2,11 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const db = require("./db");
-const sql = require("./db/db");
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
-
-// Get all products with category name
-
-// const Product = function (product) {
-//   this.product_name = product.product_name;
-//   this.price = product.price;
-//   this.category_id = product.category_id;
-//   this.stock = product.stock;
-// };
-
-// Product.findAll = function (result) {
-//   sql.query("Select * from product", function (err, res) {
-//     if (err) {
-//       console.log("error: ", err);
-//       result(null, err);
-//     } else {
-//       console.log("product : ", res);
-//       result(null, res);
-//     }
-//   });
-// };
-
-// app.get("/api/products", Product.findAll);
 
 app.get("/api/products", async (req, res) => {
   try {
@@ -347,3 +323,26 @@ const port = process.env.PORT || 3001;
 app.listen(port, () => {
   console.log(`Server has started on port ${port}`);
 });
+
+// Get all products with category name
+
+// const Product = function (product) {
+//   this.product_name = product.product_name;
+//   this.price = product.price;
+//   this.category_id = product.category_id;
+//   this.stock = product.stock;
+// };
+
+// Product.findAll = function (result) {
+//   sql.query("Select * from product", function (err, res) {
+//     if (err) {
+//       console.log("error: ", err);
+//       result(null, err);
+//     } else {
+//       console.log("product : ", res);
+//       result(null, res);
+//     }
+//   });
+// };
+
+// app.get("/api/products", Product.findAll);
